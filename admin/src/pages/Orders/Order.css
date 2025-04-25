@@ -1,0 +1,77 @@
+/* Order.css */
+.order {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .order h3 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .order-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .order-item {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 300px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .order-item img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+  }
+  
+  .order-item-food {
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  .order-item-name,
+  .order-item-contact,
+  .order-item-email,
+  .order-item-address,
+  .order-item-landmark,
+  .order-item-instructions,
+  .order-item p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .order-item-status {
+    font-size: 14px;
+    font-weight: bold;
+    color: #4caf50;
+  }
+  
+  .order-item-total {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .order-item-instructions {
+    font-style: italic;
+    color: #999;
+  }
+  
+  .order-item:last-child {
+    margin-bottom: 0;
+  }
+  

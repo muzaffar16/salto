@@ -1,0 +1,91 @@
+/* General list container styling */
+.list-container {
+    width: 100%;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.add {
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+/* Styling for the table header */
+.list-table-format {
+    display: grid;
+    grid-template-columns: 0.5fr 2fr 1fr 1fr 0.5fr;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    border: 1px solid #cacaca;
+    font-size: 13px;
+    background-color: #f9f9f9;
+    font-weight: bold;
+}
+
+/* Title styling */
+.list-table-format .title {
+    background-color: #f9f9f9;
+}
+
+.list-table {
+    width: 100%;
+}
+
+/* Styling for individual list items */
+.list-item {
+    display: grid;
+    grid-template-columns: 0.5fr 2fr 1fr 1fr 0.5fr;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    border: 1px solid #cacaca;
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+/* Styling for images */
+.list-item img {
+    width: 50px;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Styling for list details (name, category, price, etc.) */
+.list-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* Button styling for delete (X) button */
+.delete-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.delete-btn:hover {
+    background-color: #e60000;
+}
+
+/* Media Queries for different screen sizes */
+
+/* Small screens (<=600px) */
+@media (max-width: 600px) {
+    .list-table-format {
+        grid-template-columns: 1fr 3fr 1fr 1fr; 
+        gap: 15px;
+    }
+    .list-table-format.title{
+        display: none;
+    }
+
+    
+}
+

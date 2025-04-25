@@ -1,0 +1,181 @@
+/* PlaceOrder.css */
+.mainBox {
+  padding-top: 5rem;
+  background: url("../assets/hero/hero-1.jpg") no-repeat center center;
+  background-size: cover;
+  height: 8rem;
+}
+
+/* Container for the form */
+.place-order {
+  display: flex;
+  justify-content: space-between;
+  margin: 40px auto;
+  max-width: 1200px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.place-order-left {
+  width: 60%;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.place-order-left .title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* Multi input fields for name, city/state, etc. */
+.multi-fields {
+  display: flex;
+  gap: 15px;
+}
+
+.multi-fields input {
+  width: calc(50% - 7.5px); /* Two inputs side by side */
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+/* Single column inputs like address, mobile, etc. */
+.place-order-left input[type="text"],
+.place-order-left input[type="email"],
+.place-order-left input[type="tel"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.place-order-left select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+/* Right side - Cart totals section */
+.place-order-right {
+  width: 35%;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Cart Total Section */
+.cart-total {
+  margin-bottom: 20px;
+}
+
+.cart-total .price {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ccc;
+}
+
+.cart-total .price:last-child {
+  border-bottom: none;
+}
+
+.cart-total h3 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.cart-total p {
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  padding: 12px 0; /* Space between rows */
+}
+
+/* Make the last row bold (Total) */
+.cart-total p:last-child {
+  font-weight: bold;
+}
+
+.btn-red {
+  display: block;
+  padding: 12px;
+  background-color: #e74c3c;
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-red:hover {
+  background-color: #c0392b;
+}
+
+/* Styling for the selected area */
+.selected-area-container {
+  margin-top: 20px;
+}
+
+.selected-area-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.selected-area-info p {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+/* Add the selected area image style */
+.selected-area-image {
+  max-width: 120px;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Media queries for responsive design */
+@media screen and (max-width: 990px) {
+  .mainBox {
+    background: none;
+  }
+}
+
+@media screen and (max-width: 950px) {
+  .place-order {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .place-order-left,
+  .place-order-right {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .place-order-left .multi-fields input {
+    width: 100%;
+  }
+
+  .btn-red {
+    width: 80%;
+  }
+}

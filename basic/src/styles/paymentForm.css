@@ -1,0 +1,248 @@
+/* Global styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #fbe6e6; /* Light pink background */
+}
+
+/* Main box styling */
+.mainBox {
+  padding-top: 5rem;
+  background: url("../assets/hero/hero-1.jpg") no-repeat center center;
+  background-size: cover;
+  height: 8rem;
+}
+
+/* Payment method section */
+.payment-method {
+  margin-bottom: 20px;
+}
+
+.payment-method label {
+  font-size: 16px;
+  color: #444;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.payment-method div {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.payment-method div label {
+  font-size: 14px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.payment-method input[type="radio"] {
+  margin-right: 8px;
+  accent-color: #e74c3c; /* Red color for radio button */
+  transition: all 0.3s ease;
+}
+
+.payment-method input[type="radio"]:focus {
+  outline: none;
+  border-color: #e74c3c;
+}
+
+.payment-method input[type="radio"]:checked + label {
+  font-weight: bold;
+  color: #e74c3c;
+}
+
+.payment-method input[type="radio"]:not(:checked) + label:hover {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+/* Payment container and card styles */
+.payment-container {
+  background-color: #fbe6e6; /* Light red background */
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.payment-card {
+  max-width: 400px;
+  width: 100%;
+  background: #fff;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: relative;
+}
+
+/* Header styling for payment card */
+.payment-header h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 0 10px;
+  color: #e74c3c; /* Red color */
+}
+
+.payment-header p {
+  color: #666;
+  font-size: 14px;
+  margin: 0 0 20px;
+}
+
+/* Card preview styles */
+.card-preview {
+  background: linear-gradient(135deg, #e74c3c, #c0392b); /* Gradient of red shades */
+  color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  position: relative;
+  height: 150px;
+}
+
+.card-chip {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 25px;
+  background: #fff;
+  border-radius: 5px;
+}
+
+.card-number {
+  font-size: 18px;
+  margin: 20px 0;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+.card-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.card-label {
+  display: block;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 3px;
+}
+
+/* Payment form styles */
+.payment-form {
+  margin-top: 20px;
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  font-size: 14px;
+}
+
+.form-group input:focus {
+  border-color: #e74c3c;
+}
+
+.form-group label {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 12px;
+  color: #aaa;
+  transition: 0.3s ease;
+  pointer-events: none;
+}
+
+.form-group input:focus ~ label,
+.form-group input:not(:placeholder-shown) ~ label {
+  top: -8px;
+  left: 10px;
+  font-size: 10px;
+  color: #e74c3c;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+
+.payment-btn {
+  width: 100%;
+  padding: 12px;
+  background: #e74c3c; /* Red button */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.payment-btn:hover {
+  background: #c0392b;
+}
+
+/* Radio button styles for payment method selection */
+.form-group label input[type="radio"] {
+  margin-right: 10px;
+}
+
+.form-group div label {
+  display: inline-block;
+  margin-right: 15px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+  .payment-card {
+    padding: 15px;
+    max-width: 100%;
+  }
+
+  .payment-header h2 {
+    font-size: 20px;
+  }
+
+  .payment-btn {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+
+/* Animation for float effect */
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}

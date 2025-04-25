@@ -1,0 +1,310 @@
+
+.aboutus .main_heading{
+    background: url("../assets/hero/hero-1.jpg") no-repeat center center;
+    /* width: 100%; */
+    height: 35rem;
+    /* background-color: aqua; */
+    text-align: center;
+    padding-top: 10rem;
+    color: var(--white);
+    
+}
+
+.aboutus .main_heading h1{
+    font-size: 8rem;
+}
+
+/* parallax scroll */
+.section2{
+    background: url("../assets/blog/reviews.jpg") no-repeat center center;
+    color: var(--white);
+    background-size: cover;
+    background-attachment: fixed;
+    width: 100%;
+    height: 700px;
+    /* text-align: center; */
+}
+.section2 .first{
+    padding-top: 15rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    /* width: 80%; */
+    text-align: center;
+   
+}
+.section2 .first h1{
+    font-size :3.5rem;
+}
+.section2 .first h3{
+    font-size: 1rem;
+    padding-top: 2rem;
+}
+.section2 .first p{
+    padding-top: 2rem;
+}
+/* .section3{
+    padding: 0.5rem;
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+}
+.section3 .box{
+    padding-top: 2rem;
+    width: 25%;
+}
+.section3 .box .logo {
+    background: url(/src/assets/hero/price-badge-yellow.png) no-repeat center center;
+    background-size: cover;
+    width: 96px;
+    height: 90px;
+    text-align: center;
+    position:absolute;
+    top: 75rem;
+    
+} */
+.section3 {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem;
+    background-color: #F6A429; /* Adjust to match the exact background color */
+}
+
+.section3 .box {
+    /* background-color: white; */
+    width: 30%;
+    padding: 2rem;
+    text-align: center;
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.section3 .box .logo {
+    background-color: #FFF;
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto -40px;
+    position: relative;
+    top: -93px; /* Moves the logo halfway above the card */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.section3 .box .logo i{
+    color:var(--light-red);
+    font-size: 2rem;
+}
+
+.section3 .box .logo img {
+    width: 40px;
+    height: 40px;
+}
+
+.section3 .box h2 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding-bottom: 2rem;
+    color: #f5f1f1;
+}
+
+.section3 .box p {
+    color: #f5f1f1;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+.section4 .heading{
+    text-align: center;
+    padding-top: 2rem;
+    margin: 4rem;
+}
+.section4 .heading p{
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #F6A429;
+}
+.section4 .heading h1{
+     font-size: 3rem;
+}
+.section4 .background{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem;
+}
+.section4 .background .box{
+    /* background-color: #F6A429; */
+    margin: 1rem;
+    text-align:left;
+    padding: 1rem;
+    /* height: 20rem; */
+    width: 40%;
+}
+.section4 .background .box h1{
+    color: var(--light-red);
+}
+.section4 .background .divider{
+    border: 2px solid rgb(204, 201, 201);
+    height: 20rem;
+}
+.section5 .heading{
+    text-align: center;
+    padding-top: 2rem;
+    margin: 4rem;
+}
+.section5 .heading p{
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #F6A429;
+}
+.section5 .heading h1{
+     font-size: 3rem;
+}
+.section5 .outlets{
+    display: flex;
+    justify-content: space-between;
+    /* align-items: center; */
+}
+.section5 .outlets .outletcard .img{
+    text-align: center;
+}
+.section5 .outlets .outletcard .img img{
+    border-radius: 23px;
+    padding: 0.5rem;
+}
+.section5 .outlets .outletcard .part2{
+    padding: 0.5rem;
+    text-align: center;
+    margin: 0.5rem;
+    /* width: 100%; */
+    /* background-color: aqua; */
+}
+.section5 .outlets .outletcard .part2 .location{
+    text-align: center;
+}
+.section5 .outlets .outletcard .part2 .location i{
+    color: #F6A429;
+}
+.section5 .outlets .outletcard .part2 .text p{
+    color: var(--light-red);
+}
+
+
+@media (max-width:767px){
+    .aboutus .main_heading{
+        padding-top: 18rem;
+        /* height: auto; */
+    }
+    .aboutus .main_heading h1{
+        font-size: 4rem;
+    }
+    .section3{
+       display: block;
+    }
+    .section3 .box{
+        width: 100%;
+        padding-top: 8rem;
+    }
+    .section4 .background{
+        display: block;
+    }
+    .section4 .heading p{
+        font-size: 1rem;
+    }
+    .section4 .heading h1{
+         font-size: 2.5rem;
+    }
+    .section4 .background .box{
+        text-align: center;
+        width: 100%;
+    }
+    .section4 .background .divider{
+        height: 3px;
+        width: 100%;
+    }
+  
+    .section5 .outlets{
+        display: block;
+        /* background-color: brown; */
+        /* width: fit-content; */
+    }
+    .section5 .outlets .outletcard .part2{
+        padding: 0.2rem;
+        text-align: center;
+        margin: 0;
+        /* width: 100%; */
+        /* background-color: aqua; */
+    }
+}
+
+@media (max-width:780px){
+    .section2 .first{
+        padding-top: 8rem;
+    }
+    .section2 .first h1{
+        font-size: 2rem;
+        /* background-color: aqua;   */
+    } 
+    .section2 .first h3{
+        padding-top: 1rem;
+          font-size: 0.8rem;
+    }
+    .section2 .first p{
+        padding-top: 1rem;
+        /* font-size: 0.8rem; */
+  }
+    .section2 .first{
+        height: auto;
+        /* padding: 0; */
+        width: 100vw;
+    }
+   
+}
+@media (max-width:280px){
+    .section2 .first{
+        padding-top: 6rem;
+        /* width: 100%; */
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .section4 .heading p{
+        font-size: 1rem;
+    }
+    .section4 .heading h1{
+         font-size: 2rem;
+    }
+    .menuSection .main_heading h1{
+        font-size: 4rem;
+    }
+    .menuSection .main_heading{
+        padding-top: 15rem;
+    }
+}
+
+
+@media (max-width:390px){
+    .section5 .outlets .outletcard .img img{
+        width: fit-content;
+    }
+  
+    .section5 .outlets{
+        display: block;
+        /* background-color: brown; */
+        width: 90%;
+    }
+    .section5 .outlets .outletcard .part2{
+        padding: 0.2rem;
+        text-align: center;
+        margin: 0;
+        /* width: 100%; */
+        /* background-color: aqua; */
+    }
+    .menuSection .main_heading h1{
+        font-size: 4rem;
+    }
+    .menuSection .main_heading{
+        padding-top: 15rem;
+    }
+}
+ 

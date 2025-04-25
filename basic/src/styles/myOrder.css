@@ -1,0 +1,155 @@
+.mainBox {
+    padding-top: 5rem;
+    background: url("../assets/hero/hero-1.jpg") no-repeat center center;
+    background-size: cover;
+    height: 8rem;
+  }
+
+  .empty {
+    background: url(/src/assets/hero/price-badge-yellow.png) no-repeat center center;
+    background-size: cover; /* Ensures background scales properly */
+    width: 100%;
+    height: 23rem;
+    text-align: center;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .empty .h {
+    text-align: center;
+    width: 40%;
+  }
+  
+  .empty .h h1 {
+    padding-left: 3.25rem;
+    width: 80%;
+    margin: 0;
+    color: #333;
+    font-size: 2rem;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .empty {
+      height: 18rem; /* Reduce height on smaller screens */
+    }
+    .empty .h {
+      width: 60%; /* Adjust container width */
+    }
+    .empty .h h1 {
+      font-size: 1.5rem; /* Adjust font size */
+      padding-left: 1rem; /* Reduce padding */
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .empty {
+      height: 15rem; /* Further reduce height */
+    }
+    .empty .h {
+      width: 80%; /* Full-width container */
+    }
+    .empty .h h1 {
+      font-size: 1.2rem; /* Smaller font for mobile */
+      padding-left: 0.5rem; /* Minimal padding */
+    }
+  }
+  
+.order {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+  }
+  
+  .order h3 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .order-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .order-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    max-width: 300px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .order-item img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 15px;
+  }
+  
+  .order-item-food {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .order-item p {
+    font-size: 14px;
+    color: #333;
+    margin: 5px 0;
+  }
+  
+  .order-item p span {
+    font-weight: bold;
+  }
+
+  /* Container styling */
+.instruction-container {
+  background-color: #f7f2f3; 
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  /* margin: 0 auto; */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Instruction title styling */
+.instruction-title {
+  font-family: Arial, sans-serif;
+  font-size: 22px;
+  font-weight: bold;
+  color: #D32F2F;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* Instruction text styling */
+.instruction-text {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  color: #746f6f; 
+  line-height: 1.6;
+  margin: 10px 0;
+  text-align: center;
+}
+
+  
+  
+  @media screen and (max-width: 768px) {
+    .order-list {
+      flex-direction: column;
+    }
+  
+    .order-item {
+      max-width: 100%;
+    }
+  }
+  
