@@ -58,7 +58,7 @@ const Header = ({setShowLogin}) => {
                                 </div>
                             </Nav.Link>
                             <Nav.Link>
-                                 <button onClick={()=>setShowLogin(true)} >sign in</button>
+                                 <button className='sign-in' onClick={()=>setShowLogin(true)} >sign in</button>
                             </Nav.Link>
 
                             
