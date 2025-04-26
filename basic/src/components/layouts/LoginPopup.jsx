@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Use navigate to pass data
 import { useAreaContext } from "../../Context/AreaContext"; 
-// import "../../styles/LoginPopup.css";
+ import "../../styles/LoginPopup.css";
 import crossIcon from "../../assets/crossicon.png";
 
 
@@ -14,7 +14,7 @@ const LoginPopup = ({setShowLogin}) => {
        <form className="login-popup-container">
         <div className="login-popup-title">
           <h2>{currState}</h2>
-          <img  onClick={()=>setShowLogin(false)} src={crossIcon} alt="" />
+          <img className="cross-icon" onClick={()=>setShowLogin(false)} src={crossIcon} alt="" />
         </div>
         <div className="login-popup-inputs">
           {currState=="Login"?<></>:<input type="text" placeholder="Your name" required />}
