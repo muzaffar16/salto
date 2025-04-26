@@ -2,10 +2,10 @@ import React from 'react'
 import Header from './Header'
 import Footer from './Footer'
 
-const layout = ({children , setShowArea}) => {
+const layout = ({children , setShowLogin}) => {
   return (
     <>
-      <Header setShowArea={setShowArea}/>
+      <Header setShowLogin={setShowLogin}/>
          <div>{children}</div>
       <Footer/>
     </>

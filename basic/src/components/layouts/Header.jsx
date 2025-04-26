@@ -9,7 +9,7 @@ import location from "../../assets/location.png";
 
 import "../../styles/HeaderStyle.css";
 
-const Header = ({setShowArea}) => {
+const Header = ({setShowLogin}) => {
     const [nav, setNav] = useState(false);
 
     // Scroll Navbar
@@ -57,9 +57,11 @@ const Header = ({setShowArea}) => {
                                     <em className="roundpoint">2</em>
                                 </div>
                             </Nav.Link>
+                            <Nav.Link>
+                                 <button onClick={()=>setShowLogin(true)} >sign in</button>
+                            </Nav.Link>
 
                             
-                                <button onClick={()=>setShowArea(true)} className="area-btn "><img src={location} alt="" /></button>
                             
                         </Nav>
                     </Navbar.Collapse>
