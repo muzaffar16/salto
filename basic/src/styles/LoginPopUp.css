@@ -30,56 +30,8 @@
     cursor: pointer;
 }
 
-/* Delivery/Pickup Modes */
-.area-popup-modes {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
 
-.area-popup-modes button {
-    flex: 1;
-    padding: 10px 15px;
-    margin: 0 5px;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    color: #fff;
-    background: #ccc;
-    transition: background-color 0.3s;
-}
 
-.area-popup-modes button.active {
-    background: #ff6b6b;
-}
-
-.area-popup-modes button:hover {
-    background: #ff4c4c;
-}
-
-/* Dropdown Selector */
-.area-popup-select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    font-size: 14px;
-}
-
-/* Submit Button */
-.area-popup-submit {
-    background: #ff6b6b;
-    border: none;
-    color: #fff;
-    font-size: 16px;
-    padding: 12px;
-    width: 100%;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
 
 .login-popup-title{
     display: flex;

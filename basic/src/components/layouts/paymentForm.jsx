@@ -40,26 +40,34 @@ const PaymentForm = ({ orderType }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+  
     const payment_type = paymentMethod;
     const order_type = orderType;
-
+  
     // Prepare customer data to be sent to the backend
     const customerData = { ...formData };
-    
+  
     try {
       const response = await axios.post(`${url}/api/customer/add`, customerData);
-
+  
       if (response.status === 200) {
         toast.success("Customer Added Successfully...");
-        const customerId = response.data.customerId;
-        const orderData = { customerId, items: order, order_type, payment_type };
-
+        const userId = response.data.userid;
+        console.log("user id: ", userId);
+  
+        // ✅ FIXED: Use `userid` instead of `userId`
+        const orderData = {
+          userid: userId,
+          items: order,
+          order_type,
+          payment_type
+        };
+  
         const orderResponse = await axios.post(`${url}/api/orders/place`, orderData);
         if (orderResponse.status === 200) {
           setPaymentDone(true);
           toast.success("Payment successful! Redirecting...");
-
+  
           navigate("/myOrder", {
             state: {
               formData: { ...formData },
@@ -71,6 +79,7 @@ const PaymentForm = ({ orderType }) => {
       toast.error("There was an error processing your request.");
     }
   };
+  
 
   return (
     <Layout>

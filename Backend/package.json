@@ -5,12 +5,12 @@
   "type": "module",
   "scripts": {
     "start": "nodemon -r dotenv/config --experimental-json-modules server.js"
-    
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",

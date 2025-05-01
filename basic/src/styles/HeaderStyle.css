@@ -59,6 +59,41 @@ header .logo img{
     max-height: 80px;
 }
 
+.navbar-profile{
+   position: relative; 
+   margin-top: -7px;
+}
+.nav-profile-dropdown{
+    position: absolute;
+    display: none;
+    right: 0;
+    z-index: 1;
+}
+.navbar-profile:hover .nav-profile-dropdown{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-color: #fff2ef;
+    padding: 12px 25px;
+    border-radius: 4px;
+    border: 1px solid #ff4c4c;
+    outline: 2px solid white;
+    list-style: none;
+}
+.nav-profile-dropdown li{
+    display: flex;
+    /* align-items: center; */
+    gap: 10px;
+    cursor: pointer;
+}
+.nav-profile-dropdown hr{
+    margin-top: -12px;
+    margin-bottom: 0;
+}
+.nav-profile-dropdown li p:hover{
+    color: #ff4c4c;
+}
+
 header .nav-link{
     display: inline-flex;
     justify-content: center;

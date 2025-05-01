@@ -2,7 +2,7 @@ import { sequelize } from "../Postgres/postgres.js";
 
 // Placing user order for frontend
 export const placeOrder = async (req, res) => {
-    const { customerId, items, order_type, payment_type } = req.body; // Include order_type and payment_type
+    const { userid, items, order_type, payment_type } = req.body; // Include order_type and payment_type
     let transaction;
 
     try {
@@ -11,16 +11,16 @@ export const placeOrder = async (req, res) => {
 
         // Step 1: Insert the order into the orders table
         const order = await sequelize.query(
-            `INSERT INTO orders (customerid, totalamount, orderstatus, orderdate, order_type, payment_type)
-             VALUES (:customerId, :totalAmount, :orderStatus, CURRENT_TIMESTAMP, :order_type, :payment_type)
+            `INSERT INTO orders ( totalamount, orderstatus, orderdate, order_type, payment_type,userid)
+             VALUES (:totalAmount, :orderStatus, CURRENT_TIMESTAMP, :order_type, :payment_type,:userid)
              RETURNING *`,
             {
                 replacements: {
-                    customerId,
                     totalAmount: calculateTotalPrice(items),
                     orderStatus: 'Food Processing', // Default status for new orders
                     order_type,
-                    payment_type
+                    payment_type,
+                    userid
                 },
                 transaction,
             }
@@ -94,40 +94,43 @@ function calculateTotalPrice(items) {
 export const listOrders = async (req, res) => {
     try {
         const [orders] = await sequelize.query(`
-            SELECT 
-                o.orderid, 
-                o.orderdate, 
-                o.totalamount, 
-                c.first_name || ' ' || c.last_name AS "customername",
-                c.mobile_number,c.email,c.address,c.nearest_landmark,
-                c.selected_area,
-                c.delivery_instructions,o.order_type,o.payment_type,
-                o.orderstatus,
-                ARRAY_AGG(
-                    JSON_BUILD_OBJECT(
-                        'productid', p.productid,
-                        'productname', p.productname,
-                        'quantity', oi.quantity,
-                        'price', oi.price
-                    )
-                ) AS order_items
-            FROM 
-                orders o
-            JOIN 
-                customers c ON o.customerid = c.customerid
-            LEFT JOIN 
-                order_items oi ON o.orderid = oi.orderid
-            LEFT JOIN 
-                products p ON oi.productid = p.productid
-            WHERE 
-                o.orderstatus NOT IN ('cancelled')
-            GROUP BY 
-                o.orderid, c.first_name, c.last_name,c.mobile_number,c.email,c.address,c.nearest_landmark,
-                c.selected_area,
-                c.delivery_instructions,
-                o.orderstatus
-            ORDER BY 
-                o.orderid DESC;
+SELECT 
+    o.orderid,
+    o.orderdate,
+    o.totalamount,
+    u.name AS "customername",
+    d.mobile_number, u.email, d.address, d.nearest_landmark,
+    d.selected_area,
+    d.delivery_instructions, o.order_type, o.payment_type,
+    o.orderstatus,
+    ARRAY_AGG(
+        JSON_BUILD_OBJECT(
+            'productid', p.productid,
+            'productname', p.productname,
+            'quantity', oi.quantity,
+            'price', oi.price
+        )
+    ) AS order_items
+FROM 
+    orders o
+JOIN 
+    users u ON o.userid = u.userid
+JOIN
+    deliverydetails d ON o.userid = d.userid  -- Added missing JOIN for delivery table
+LEFT JOIN 
+    order_items oi ON o.orderid = oi.orderid
+LEFT JOIN 
+    products p ON oi.productid = p.productid
+WHERE 
+    o.orderstatus NOT IN ('cancelled')
+GROUP BY 
+    o.orderid, u.name, d.mobile_number, u.email, d.address, d.nearest_landmark,
+    d.selected_area, d.delivery_instructions, o.orderstatus
+ORDER BY 
+    o.orderid DESC;
+
+
+
         `);
 
         res.status(200).json({ success: true, data: orders });
@@ -168,10 +171,12 @@ export const updateStatus = async (req, res) => {
     }
   };
 
+
+  //get my orders
   export const getMyOrder = async (req, res) => {
     try {
-      const { customeremail } = req.body;
-      if (!customeremail) {
+      const { useremail } = req.body;
+      if (!useremail) {
         return res.status(400).json({ success: false, message: 'Email is required' });
       }
   
@@ -193,34 +198,32 @@ export const updateStatus = async (req, res) => {
           FROM 
               orders o
           JOIN 
-              customers c ON o.customerid = c.customerid
+              users u ON o.userid = u.userid
           LEFT JOIN 
               order_items oi ON o.orderid = oi.orderid
           LEFT JOIN 
               products p ON oi.productid = p.productid
           WHERE 
-              c.email = :customeremail
+              u.email = :useremail
           GROUP BY 
               o.orderid, o.orderdate, o.totalamount, o.orderstatus
           ORDER BY 
               o.orderid DESC;
         `,
         {
-          replacements: { customeremail },
+          replacements: { useremail },
           type: sequelize.QueryTypes.SELECT
         }
       );
   
-    //   console.log("Query result:", orders);  // Debugging query results
-  
       res.status(200).json({ success: true, data: orders });
     } catch (error) {
-        console.error("Error fetching orders:", error);
-        res.status(500).json({ 
-            success: false, 
-            message: "Failed to fetch orders", 
-            error: error.message 
-        });
+      console.error("Error fetching orders:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch orders", 
+        error: error.message 
+      });
     }
   };
   

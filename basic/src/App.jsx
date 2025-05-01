@@ -7,44 +7,44 @@ import Menu from "./pages/menu/Menu";
 import Cart from "./pages/Cart/Cart";
 import PlaceOrder from "./pages/PlaceOrder/placeOrder";
 import { useState } from "react";
-// import AreaPopup from "./components/layouts/AreaPopup";
-import OrderState from "./Context/OrderState"; // Import existing context
-import { AreaProvider } from "./Context/AreaContext"; // Import the new AreaProvider
+import OrderState from "./Context/OrderState"; // Existing context
+import { AreaProvider } from "./Context/AreaContext"; // Existing context
+import { PaymentProvider } from "./Context/PaymentContext"; // Existing context
+import { TokenProvider } from "./Context/TokenContext"; // <<== 🔥 Import TokenProvider
+import { EmailProvider } from "./Context/EmailContext";
 import PaymentForm from "./components/layouts/paymentForm";
 import MyOrder from "./pages/MyOrders/myOrder";
-import { PaymentProvider } from "./Context/PaymentContext";
 import LoginPopup from "./components/layouts/LoginPopup";
+
 function App() {
   const [orderType, setOrderType] = useState(""); // This will store 'Delivery' or 'Pickup'
   const [showLogin, setShowLogin] = useState(false); // To control the visibility of the popup
 
-
   return (
     <OrderState>
       <AreaProvider>
-      <PaymentProvider>
-        <Router>
-          <>
-            {showLogin?<LoginPopup setShowLogin={setShowLogin} /> : <></>}
-            {/* Show the AreaPopup only if showArea is true */}
-            {/* {showLogin && <LoginPopup setShowLogin={setShowLogin} setOrderType={setOrderType} />} */}
+        <PaymentProvider>
+          <TokenProvider>
+          <EmailProvider>
+            <Router>
+              <>
+                {showLogin && <LoginPopup setShowLogin={setShowLogin} />}
+                
+                <Routes>
+                  <Route path="/" element={<Home setShowLogin={setShowLogin} />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/menu" element={<Menu />} />
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/myOrder" element={<MyOrder />} />
+                  <Route path="/placeOrder" element={<PlaceOrder />} />
+                  <Route path="/paymentForm" element={<PaymentForm orderType={orderType} />} />
+                </Routes>
 
-            
-            {/* Define Routes for the application */}
-            <Routes>
-              <Route path="/" element={<Home setShowLogin={setShowLogin} />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/menu" element={<Menu />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/myOrder" element={<MyOrder />} />
-              <Route path="/placeOrder" element={<PlaceOrder />} />
-              <Route path="/paymentForm" element={<PaymentForm orderType={orderType} />} />
-            </Routes>
-
-            {/* Toast notifications */}
-            <ToastContainer position="top-right" autoClose={3000} />
-          </>
-        </Router>
+                <ToastContainer position="top-right" autoClose={3000} />
+              </>
+            </Router>
+            </EmailProvider>
+          </TokenProvider> 
         </PaymentProvider>
       </AreaProvider>
     </OrderState>

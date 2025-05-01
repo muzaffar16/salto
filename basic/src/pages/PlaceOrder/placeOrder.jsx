@@ -1,52 +1,51 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import orderContext from "../../Context/OrderContext";
 import "../../styles/PlaceOrder.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Layout from "../../components/layouts/layout";
-import { useAreaContext } from "../../Context/AreaContext"; // Correct import of the custom hook
-
+import { useAreaContext } from "../../Context/AreaContext";
+import { EmailContext } from "../../Context/EmailContext";
+import axios from "axios";
 
 function PlaceOrder() {
-  // const url="http://localhost:3000";
+  const url = "http://localhost:3000";
   const { order } = useContext(orderContext);
-  const { selectedArea } = useAreaContext(); // Correct usage of the custom hook
+  const { selectedArea } = useAreaContext();
+  const { email } = useContext(EmailContext);
+  const navigate = useNavigate();
 
-  const navigate = useNavigate(); // Hook to navigate
-
-  // State for the checkout form fields
   const [formData, setFormData] = useState({
-    title: "Mr.",
-    firstName: "",
-    lastName: "",
     mobileNumber: "",
     alternateMobileNumber: "",
     address: "",
     nearestLandmark: "",
-    email: "",
+    email: email || "",
     deliveryInstructions: "",
-    selectedArea: selectedArea || "", // Make sure selectedArea is a string
+    selectedArea: selectedArea || "",
+    firstName: "",
+    lastName: "",
+    userId: null  // ✅ Add this
   });
+  
 
-  // State for form validation
   const [addressError, setAddressError] = useState(false);
 
-  // Calculate total price for all items
-  const totalCartPrice = order.reduce((total, item) => total + item.price * item.quantity, 0);
+  const totalCartPrice = order.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: value
     });
   };
 
-  // Handle form submission (async function)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Simple validation to check if the address is filled
     if (!formData.address.trim()) {
       setAddressError(true);
       return;
@@ -54,15 +53,102 @@ function PlaceOrder() {
       setAddressError(false);
     }
 
-    // Proceed to Payment form with form data, order, and total cart price as state
-    navigate('/paymentForm', { 
-      state: { 
-        formData, 
-        order, 
-        totalCartPrice 
-      } 
+    navigate("/paymentForm", {
+      state: {
+        formData,
+        order,
+        totalCartPrice,
+        userId: formData.userId // ✅ explicitly include it if needed in payment page
+      }
     });
-};
+  };
+
+  // ✅ Fetch user's name using email from context and auto-fill first/last name
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const response = await axios.get(`${url}/api/user/details`, {
+          params: { email }
+        });
+
+        if (response.data && response.data.name) {
+          const fullName = response.data.name.trim();
+          const [firstName, ...lastNameParts] = fullName.split(" ");
+          const lastName = lastNameParts.join(" ");
+
+          setFormData((prev) => ({
+            ...prev,
+            firstName: firstName || "",
+            lastName: lastName || ""
+          }));
+        }
+      } catch (error) {
+        console.error("Failed to fetch user details:", error);
+      }
+    };
+
+    if (email) {
+      fetchUserDetails();
+    }
+  }, [email]);
+
+  // ✅ Fetch user's previous delivery details
+  useEffect(() => {
+    const fetchDeliveryDetails = async () => {
+      try {
+        const response = await axios.get(`${url}/api/customer/deliveryDetails`, {
+          params: { email }
+        });
+  
+        if (response.data) {
+          const {
+            mobile_number,
+            alternate_mobile_number,
+            address,
+            nearest_landmark,
+            delivery_instructions,
+            selected_area,
+            userid ,// ✅ include userid
+            firstName,
+            lastName
+          } = response.data;
+          
+          setFormData((prev) => ({
+            ...prev,
+            mobileNumber: mobile_number || "",
+            alternateMobileNumber: alternate_mobile_number || "",
+            address: address || "",
+            nearestLandmark: nearest_landmark || "",
+            deliveryInstructions: delivery_instructions || "",
+            selectedArea: selected_area || selectedArea,
+            userId: userid || null ,
+            firstName: firstName || "",
+            lastName: lastName || ""
+          }));
+          
+  
+          setFormData((prev) => ({
+            ...prev,
+            mobileNumber: mobile_number || "",
+            alternateMobileNumber: alternate_mobile_number || "",
+            address: address || "",
+            nearestLandmark: nearest_landmark || "",
+            deliveryInstructions: delivery_instructions || "",
+            selectedArea: selected_area || selectedArea, // fallback to context
+            firstName: firstName || "",
+            lastName: lastName || ""
+          }));
+        }
+      } catch (error) {
+        console.error("Failed to fetch delivery details:", error);
+      }
+    };
+  
+    if (email) {
+      fetchDeliveryDetails();
+    }
+  }, [email]);
+  
 
   return (
     <Layout>
@@ -72,19 +158,6 @@ function PlaceOrder() {
         <div className="place-order-left">
           <p className="title">Delivery Information</p>
 
-          {/* Title Dropdown */}
-          <select
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            required
-          >
-            <option value="Mr.">Mr.</option>
-            <option value="Ms.">Ms.</option>
-            <option value="Mrs.">Mrs.</option>
-          </select>
-
-          {/* Name Inputs */}
           <div className="multi-fields">
             <input
               type="text"
@@ -103,7 +176,6 @@ function PlaceOrder() {
             />
           </div>
 
-          {/* Contact Details */}
           <input
             type="tel"
             name="mobileNumber"
@@ -120,7 +192,6 @@ function PlaceOrder() {
             placeholder="Alternate Mobile Number"
           />
 
-          {/* Delivery Address */}
           <input
             type="text"
             name="address"
@@ -129,9 +200,10 @@ function PlaceOrder() {
             placeholder="Enter Your Complete Address"
             required
           />
-          {addressError && <p className="error-text">Please complete your address</p>}
+          {addressError && (
+            <p className="error-text">Please complete your address</p>
+          )}
 
-          {/* Show the selected area after the address input */}
           {formData.selectedArea && (
             <div className="selected-area-container">
               <label>Selected Area:</label>
@@ -139,7 +211,6 @@ function PlaceOrder() {
             </div>
           )}
 
-          {/* Landmark and Email */}
           <input
             type="text"
             name="nearestLandmark"
@@ -155,8 +226,6 @@ function PlaceOrder() {
             placeholder="Email Address"
             required
           />
-
-          {/* Delivery Instructions */}
           <input
             type="text"
             name="deliveryInstructions"

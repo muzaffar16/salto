@@ -37,14 +37,13 @@ export const addFood = async (req, res) => {
 
         // Insert new product
         await sequelize.query(
-            `INSERT INTO products (productname, categoryid, price, stockquantity, producturl)
-             VALUES (:productname, :categoryid, :price, :stockquantity, :producturl)`,
+            `INSERT INTO products (productname, categoryid, price,  producturl)
+             VALUES (:productname, :categoryid, :price, :producturl)`,
             {
                 replacements: {
                     productname,
                     categoryid,
                     price,
-                    stockquantity,
                     producturl,
                 },
             }
