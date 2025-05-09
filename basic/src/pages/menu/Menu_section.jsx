@@ -4,17 +4,17 @@ import axios from 'axios';
 import { Index } from "./index";
 // import burgerMenu from "./burgerMenu.json";
 import { toast } from 'react-toastify';
-
+import.meta.env.backend_url
 function Menu_section() {
   // const order=useContext(orderContext);
-  const url = "http://localhost:3000"; // Backend endpoint
+  // const url = "http://localhost:3000"; // Backend endpoint
   const [menu, setMenu] = useState({});
   const [categories, setCategories] = useState([]);
 
   // Fetch all categories and menus
   const fetchCategoriesAndMenus = async () => {
     try {
-      const categoriesResponse = await axios.get(`${url}/api/food/categories`);
+      const categoriesResponse = await axios.get(`${backend_url}/api/food/categories`);
       console.log(categoriesResponse.data);
 
       if (categoriesResponse.data && categoriesResponse.data.length > 0) {
