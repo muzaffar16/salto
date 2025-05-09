@@ -2,7 +2,7 @@ import React from 'react';
 import Layout from "../../components/layouts/layout";
 import Menu_section from '../menu/Menu_section'
 // import FoodMenu from '../menu/FoodMenu'
-import  "../../styles/Menu.css";
+import  "@/styles/Menu.css";
 function Menu() {
   return (
     <>

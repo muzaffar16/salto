@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from "react-router-dom";
 // index.js or App.js
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import Outlet1 from "../../assets/outlets/outlet1.jpg" 
+import Outlet1 from "@/assets/outlets/outlet1.jpg" 
 
 function About_section1() {
   return (

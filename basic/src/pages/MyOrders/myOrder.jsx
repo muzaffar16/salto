@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { PaymentContext } from "../../Context/PaymentContext";
 import Layout from "../../components/layouts/layout";
-import "../../styles/myOrder.css";
+import "@/styles/myOrder.css";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";

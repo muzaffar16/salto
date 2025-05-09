@@ -2,10 +2,10 @@ import React, { useState, useContext } from 'react';  // ✅ Also import useCont
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import Logo from "../../assets/logo/salto_logo.png";
+import Logo from "@/assets/logo/salto_logo.png";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Link, useNavigate } from "react-router-dom";
-import "../../styles/HeaderStyle.css";
+import "@/styles/HeaderStyle.css";
 
 import { TokenContext } from "../../Context/TokenContext";  // ✅ Import your TokenContext
 

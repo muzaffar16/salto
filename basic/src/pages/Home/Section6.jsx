@@ -2,10 +2,10 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import { Container, Row, Col,Carousel } from "react-bootstrap";
 
-import user1 from "../../assets/blog/review-author-1.jpg";
-import user2 from "../../assets/blog/review-author-2.jpg";
-import user3 from "../../assets/blog/review-author-3.jpg";
-import user4 from "../../assets/blog/review-author-5.jpg";
+import user1 from "@/assets/blog/review-author-1.jpg";
+import user2 from "@/assets/blog/review-author-2.jpg";
+import user3 from "@/assets/blog/review-author-3.jpg";
+import user4 from "@/assets/blog/review-author-5.jpg";
 
 
 function Section6() {

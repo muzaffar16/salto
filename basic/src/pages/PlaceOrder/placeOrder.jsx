@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import orderContext from "../../Context/OrderContext";
-import "../../styles/PlaceOrder.css";
+import "@/styles/PlaceOrder.css";
 import { useNavigate } from "react-router-dom";
 import Layout from "../../components/layouts/layout";
 import { useAreaContext } from "../../Context/AreaContext";
