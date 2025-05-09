@@ -14,7 +14,7 @@ function Menu_section() {
   // Fetch all categories and menus
   const fetchCategoriesAndMenus = async () => {
     try {
-      const categoriesResponse = await axios.get(`${import.meta.env.backend_url}/api/food/categories`);
+      const categoriesResponse = await axios.get(`${import.meta.env.VITE_backend_url}/api/food/categories`);
       console.log(categoriesResponse.data);
 
       if (categoriesResponse.data && categoriesResponse.data.length > 0) {
@@ -27,7 +27,7 @@ function Menu_section() {
           console.log(category.categoryname);
 
           try {
-            const response = await axios.get(`${import.meta.env.backend_url}/api/food/list?categoryname=${category.categoryname}`);
+            const response = await axios.get(`${import.meta.env.VITE_backend_url}/api/food/list?categoryname=${category.categoryname}`);
             // Store the response data in the menus object with the category name as the key
             menus[category.categoryname] = response.data || [];
             
