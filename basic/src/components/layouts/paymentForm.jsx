@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react"; 
 import { useLocation, useNavigate } from "react-router-dom";
-import "@/styles/PaymentForm.css";
+import "@/styles/paymentForm.css";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Layout from "./layout";
