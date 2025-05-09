@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 // import.meta.env.backend_url
 function Menu_section() {
   // const order=useContext(orderContext);
+  console.log(import.meta.env.VITE_backend_url)
   // const url = "http://localhost:3000"; // Backend endpoint
   const [menu, setMenu] = useState({});
   const [categories, setCategories] = useState([]);
@@ -15,7 +16,7 @@ function Menu_section() {
   const fetchCategoriesAndMenus = async () => {
     try {
       const categoriesResponse = await axios.get(`${import.meta.env.VITE_backend_url}/api/food/categories`);
-      console.log(categoriesResponse.data);
+      console.log("hello",categoriesResponse);
 
       if (categoriesResponse.data && categoriesResponse.data.length > 0) {
         setCategories(categoriesResponse.data);

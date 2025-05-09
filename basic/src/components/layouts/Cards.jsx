@@ -6,13 +6,13 @@ import { toast } from 'react-toastify';
 
 function Cards({ image,  title, price }) {
   const { order, addToOrder } = useContext(orderContext);
-  const url = "http://localhost:3000"; // Backend endpoint
+  // const url = "http://localhost:3000"; // Backend endpoint
   return (
     <Col sm={6} lg={4} xl={3} className="mb-4">
       <Card className="overflow-hidden">
         <div className="overflow-hidden">
         {/* console.log(`{url}/api/food/${image}`);  // This will print the value of image */}
-        <Card.Img variant="top" src={`${url}/images/${image}`} />
+        <Card.Img variant="top" src={`${import.meta.env.VITE_backend_url}/images/${image}`} />
 
           
         </div>
@@ -27,7 +27,7 @@ function Cards({ image,  title, price }) {
             </div>
             <div className="add_to_card">
               <Link onClick={() => {
-                const orderItem = { title, price, imageUrl: `${url}/images/${image}` };
+                const orderItem = { title, price, imageUrl: `${import.meta.env.VITE_backend_url}/images/${image}` };
                 // Create an order object
                 addToOrder(orderItem); // Use addToOrder to update the order array
                 toast.success(`${title} added into your cart`);
