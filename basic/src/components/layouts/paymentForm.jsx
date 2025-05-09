@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import Layout from "./layout";
 import { PaymentContext } from "../../Context/PaymentContext"; 
 
-const url = "http://localhost:3000";
+// const url = "http://localhost:3000";
 
 const PaymentForm = ({ orderType }) => {
   const { setPaymentDone } = useContext(PaymentContext);
@@ -48,7 +48,7 @@ const PaymentForm = ({ orderType }) => {
     const customerData = { ...formData };
   
     try {
-      const response = await axios.post(`${url}/api/customer/add`, customerData);
+      const response = await axios.post(`${import.meta.env.VITE_backend_url}/api/customer/add`, customerData);
   
       if (response.status === 200) {
         toast.success("Customer Added Successfully...");
@@ -63,7 +63,7 @@ const PaymentForm = ({ orderType }) => {
           payment_type
         };
   
-        const orderResponse = await axios.post(`${url}/api/orders/place`, orderData);
+        const orderResponse = await axios.post(`${import.meta.env.VITE_backend_url}/api/orders/place`, orderData);
         if (orderResponse.status === 200) {
           setPaymentDone(true);
           toast.success("Payment successful! Redirecting...");

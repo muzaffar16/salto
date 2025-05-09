@@ -9,14 +9,14 @@ import axios from 'axios';
 
 function Section3() {
 
-  const url = "http://localhost:3000"; // Backend endpoint
+//   const url = "http://localhost:3000"; // Backend endpoint
 
   const [popular_food, setPopular_food] = useState([]);
 
   // Fetch popular food data
   const fetch_popular_data = async () => {
       try {
-          const response = await axios.get(`${url}/api/food/popularFood`);
+          const response = await axios.get(`${import.meta.env.VITE_backend_url}/api/food/popularFood`);
           console.log(response.data);
 
           if (response.data && response.data.length > 0) {

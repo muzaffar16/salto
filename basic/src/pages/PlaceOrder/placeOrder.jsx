@@ -8,7 +8,7 @@ import { EmailContext } from "../../Context/EmailContext";
 import axios from "axios";
 
 function PlaceOrder() {
-  const url = "http://localhost:3000";
+  // const url = "http://localhost:3000";
   const { order } = useContext(orderContext);
   const { selectedArea } = useAreaContext();
   const { email } = useContext(EmailContext);
@@ -67,7 +67,7 @@ function PlaceOrder() {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const response = await axios.get(`${url}/api/user/details`, {
+        const response = await axios.get(`${import.meta.env.VITE_backend_url}/api/user/details`, {
           params: { email }
         });
 
@@ -96,7 +96,7 @@ function PlaceOrder() {
   useEffect(() => {
     const fetchDeliveryDetails = async () => {
       try {
-        const response = await axios.get(`${url}/api/customer/deliveryDetails`, {
+        const response = await axios.get(`${import.meta.env.VITE_backend_url}/api/customer/deliveryDetails`, {
           params: { email }
         });
   

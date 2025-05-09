@@ -30,7 +30,7 @@ function MyOrder() {
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/api/orders/myOrder", {
+      const response = await axios.post(`${import.meta.env.VITE_backend_url}/api/orders/myOrder`, {
         useremail: customerEmail,
       });
 

@@ -7,7 +7,7 @@ import { TokenContext } from "../../Context/TokenContext";  // ✅ Import the To
 import { EmailContext } from "../../Context/EmailContext"; // ✅ Add this line
 
 
-const url = "http://localhost:3000";
+const url = `${import.meta.env.VITE_backend_url}`;
 
 const LoginPopup = ({ setShowLogin }) => {
   const { setToken } = useContext(TokenContext);  // ✅ Access setToken from context

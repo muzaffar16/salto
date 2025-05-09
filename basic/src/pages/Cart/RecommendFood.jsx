@@ -16,7 +16,7 @@ function RecommendFood() {
                 console.log(order);
                 
                 try {
-                    const response = await axios.post("http://localhost:3000/api/food/recommandFood", { items: order });
+                    const response = await axios.post(`${import.meta.env.VITE_backend_url}/api/food/recommandFood`, { items: order });
                     setRecommendedItems(response.data.recommendations.flatMap(rec => rec.recommendations));
                 } catch (error) {
                     // console.error("Error fetching recommendations:", error);
