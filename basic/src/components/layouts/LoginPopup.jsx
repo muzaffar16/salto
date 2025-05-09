@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 // import "/basic/src/styles/LoginPopup.css";
 import "@/styles/LoginPopup.css";
-import crossIcon from "/src/assets/crossicon.png";
+import crossIcon from "basic/src/assets/crossicon.png";
 import axios from "axios";
 import { TokenContext } from "../../Context/TokenContext";  // ✅ Import the TokenContext
 import { EmailContext } from "../../Context/EmailContext"; // ✅ Add this line
