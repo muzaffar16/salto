@@ -8,7 +8,7 @@ function RecommendFood() {
     const sliderRef = useRef(null);
     const { order } = useContext(orderContext);
     const [recommendedItems, setRecommendedItems] = useState([]);
-
+    // const url = "http://localhost:3000";
     // Fetch recommendations based on the current order
     useEffect(() => {
         const fetchRecommendations = async () => {

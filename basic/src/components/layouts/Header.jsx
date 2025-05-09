@@ -67,7 +67,7 @@ const Header = ({ setShowLogin }) => {
                                 </div>
                             </Nav.Link>
 
-                            {/* 👇 Check token and conditionally show Login or Logout button */}
+                            {/* Check token and conditionally show Login or Logout button */}
                             <Nav.Link>
                                 {!token ? (
                                     <button className='sign-in' onClick={()=>setShowLogin(true)}>
