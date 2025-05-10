@@ -40,7 +40,7 @@ function MyOrder() {
       if (response.data?.success && response.data?.data) {
         const orderData = response.data.data;
         const ordersArray = Array.isArray(orderData) ? orderData : [orderData];
-
+        console.log(ordersArray)
         setOrders(ordersArray);
         toast.success("Your Order(s) fetched successfully");
       } else {
