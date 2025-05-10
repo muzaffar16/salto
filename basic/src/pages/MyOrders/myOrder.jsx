@@ -38,14 +38,13 @@ function MyOrder() {
       
 
       if (response.data?.success && response.data?.data) {
-        const orderData = response.data.data;
-        const ordersArray = Array.isArray(orderData) ? orderData : [orderData];
-
+        const ordersArray = response.data.data; // already an array
         setOrders(ordersArray);
         toast.success("Your Order(s) fetched successfully");
       } else {
         toast.error("No orders found");
       }
+      
     } catch (error) {
       console.error("Error fetching orders:", error);
       toast.error("Failed to fetch orders");
