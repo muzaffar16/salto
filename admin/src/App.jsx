@@ -12,7 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
-  const url = "http://localhost:3000"; // Backend endpoint
+  const url = import.meta.env.VITE_backend_url; // Backend endpoint
 
   return (
     <div>
