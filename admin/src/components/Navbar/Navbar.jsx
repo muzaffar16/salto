@@ -1,6 +1,6 @@
 import React from 'react'
-import "./Navbar.css"
-import {assets} from "../../assets/asset"
+import "@/Navbar.css"
+import {assets} from "@/assets/asset"
 
 function Navbar() {
   return (
