@@ -38,7 +38,7 @@ function MyOrder() {
 
       if (ordersArray.length > 0) {
         setOrders(ordersArray);
-        console.log(orders)
+        console.log(ordersArray)
         toast.success("Your order(s) fetched successfully.");
       } else {
         toast.info("No orders found.");
