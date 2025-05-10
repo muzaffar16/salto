@@ -12,17 +12,14 @@ function MyOrder() {
   const location = useLocation();
   const { formData } = location.state || {};
 
-  // Get customerEmail from location.state or localStorage
   const customerEmail = formData?.email || localStorage.getItem("userEmail") || "";
 
-  // If formData has email, store it in localStorage
   useEffect(() => {
     if (formData?.email) {
       localStorage.setItem("userEmail", formData.email);
     }
   }, [formData]);
 
-  // Function to fetch orders from the database
   const fetchAllOrder = async () => {
     if (!customerEmail) {
       toast.error("Customer email is missing.");
@@ -33,18 +30,14 @@ function MyOrder() {
       const response = await axios.post(`${import.meta.env.VITE_backend_url}/api/orders/myOrder`, {
         useremail: customerEmail,
       });
-      
-      console.log(response.data?.data); // Check what data is being returned from the API
-      
 
-      if (response.data?.success && response.data?.data) {
-        const orderData = response.data.data;
-        // const ordersArray = Array.isArray(orderData) ? orderData : [orderData];
-        console.log(orderData)
-        setOrders(orderData);
-        console.log("orders",orders)
+      console.log("API Response:", response.data);
+
+      if (response.data?.success && Array.isArray(response.data.data) && response.data.data.length > 0) {
+        setOrders(response.data.data);
         toast.success("Your Order(s) fetched successfully");
       } else {
+        setOrders([]);
         toast.error("No orders found");
       }
     } catch (error) {
@@ -53,13 +46,11 @@ function MyOrder() {
     }
   };
 
-  // Effect to fetch orders whenever the component mounts or when payment is done
   useEffect(() => {
-    // Check if we have a valid email and fetch orders only if payment is done or on initial load
     if (customerEmail) {
       fetchAllOrder();
     }
-  }, [customerEmail, paymentDone]);  // Fetch orders when email or paymentDone state changes
+  }, [customerEmail, paymentDone]);
 
   return (
     <Layout>
