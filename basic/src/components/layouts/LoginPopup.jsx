@@ -1,11 +1,9 @@
 import React, { useState, useContext } from "react";
-// import "/basic/src/styles/LoginPopup.css";
 import "@/styles/LoginPopUp.css";
 import crossIcon from "@/assets/crossIcon.png";
 import axios from "axios";
 import { TokenContext } from "../../Context/TokenContext";  // ✅ Import the TokenContext
 import { EmailContext } from "../../Context/EmailContext"; // ✅ Add this line
-
 
 const url = `${import.meta.env.VITE_backend_url}`;
 
@@ -23,15 +21,15 @@ const LoginPopup = ({ setShowLogin }) => {
   const onChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-  
+
     // Store email in context
     if (name === "email") {
       setEmail(value);
     }
-  
+
     setData((data) => ({ ...data, [name]: value }));
   };
-  
+
   const onLogin = async (event) => {
     event.preventDefault();
     let newUrl = url;
@@ -47,7 +45,9 @@ const LoginPopup = ({ setShowLogin }) => {
       if (response.data.success) {
         const token = response.data.token;
         setToken(token);  // ✅ Update token in context
+        setEmail(data.email);  // Store email in context
         localStorage.setItem("token", token);  // Store token in localStorage
+        localStorage.setItem("userEmail", data.email);  // Store email in localStorage
         setShowLogin(false);  // Close login popup
       } else {
         alert(response.data.message);  // Show error message

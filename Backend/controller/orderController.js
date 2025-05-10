@@ -172,57 +172,66 @@ export const updateStatus = async (req, res) => {
   };
 
 
-  //get my orders
-  export const getMyOrder = async (req, res) => {
+ // get my orders
+export const getMyOrder = async (req, res) => {
     try {
       const { useremail } = req.body;
+  
+      // Check if the email is provided
       if (!useremail) {
         return res.status(400).json({ success: false, message: 'Email is required' });
       }
   
-      const [orders] = await sequelize.query(
+      // Execute the query to fetch orders along with order items
+      const [orderRows] = await sequelize.query(
         `
           SELECT 
-              o.orderid, 
-              o.orderdate, 
-              o.totalamount, 
-              o.orderstatus,
-              JSON_AGG(
-                  JSON_BUILD_OBJECT(
-                      'productid', p.productid,
-                      'productname', p.productname,
-                      'quantity', oi.quantity,
-                      'price', oi.price
-                  )
-              ) AS order_items
+            o.orderid, 
+            o.orderdate, 
+            o.totalamount, 
+            o.orderstatus,
+            JSON_AGG(
+              JSON_BUILD_OBJECT(
+                'productid', p.productid,
+                'productname', p.productname,
+                'quantity', oi.quantity,
+                'price', oi.price
+              )
+            ) AS order_items
           FROM 
-              orders o
+            orders o
           JOIN 
-              users u ON o.userid = u.userid
+            users u ON o.userid = u.userid
           LEFT JOIN 
-              order_items oi ON o.orderid = oi.orderid
+            order_items oi ON o.orderid = oi.orderid
           LEFT JOIN 
-              products p ON oi.productid = p.productid
+            products p ON oi.productid = p.productid
           WHERE 
-              u.email = :useremail
+            u.email = :useremail
           GROUP BY 
-              o.orderid, o.orderdate, o.totalamount, o.orderstatus
+            o.orderid, o.orderdate, o.totalamount, o.orderstatus
           ORDER BY 
-              o.orderid DESC;
+            o.orderid DESC;
         `,
         {
           replacements: { useremail },
-          type: sequelize.QueryTypes.SELECT
+          type: sequelize.QueryTypes.SELECT,
         }
       );
   
-      res.status(200).json({ success: true, data: orders });
+      // If no orders found
+      if (!orderRows || orderRows.length === 0) {
+        return res.status(404).json({ success: false, message: 'No orders found for this user.' });
+      }
+  
+      // Return found orders
+      res.status(200).json({ success: true, data: orderRows });
     } catch (error) {
       console.error("Error fetching orders:", error);
       res.status(500).json({ 
         success: false, 
         message: "Failed to fetch orders", 
-        error: error.message 
+        error: error.message,
       });
     }
   };
