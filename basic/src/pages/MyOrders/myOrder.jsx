@@ -40,7 +40,8 @@ function MyOrder() {
       } else if (data && typeof data === "object" && data.orderid) {
         ordersArray = [data]; // wrap single order
       }
-
+      console.log(ordersArray)
+      console.log(orders)
       setOrders(ordersArray);
       toast.success("Your order(s) fetched successfully");
     } catch (error) {
