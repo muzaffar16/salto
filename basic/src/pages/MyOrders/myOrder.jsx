@@ -11,9 +11,9 @@ function MyOrder() {
   const [orders, setOrders] = useState([]);
   const location = useLocation();
   const { formData } = location.state || {};
+
   const customerEmail = formData?.email || localStorage.getItem("userEmail") || "";
 
-  // persist email
   useEffect(() => {
     if (formData?.email) {
       localStorage.setItem("userEmail", formData.email);
@@ -32,44 +32,23 @@ function MyOrder() {
         { useremail: customerEmail }
       );
 
-      // 1) What did the API return exactly?
-      console.log("1) raw response.data.data:", response.data.data);
+      const data = response.data?.data;
 
-      // 2) Is it an array?
-      console.log(
-        "2) is array? length:",
-        Array.isArray(response.data.data),
-        response.data.data?.length
-      );
-
-      // 3) Normalize into an actual array of orders
       let ordersArray = [];
-      if (Array.isArray(response.data.data)) {
-        ordersArray = response.data.data;
-      } else if (
-        response.data.data &&
-        typeof response.data.data === "object"
-      ) {
-        // sometimes Sequelize returns object with numeric keys
-        ordersArray = Object.values(response.data.data);
+      if (Array.isArray(data)) {
+        ordersArray = data;
+      } else if (data && typeof data === "object" && data.orderid) {
+        ordersArray = [data]; // wrap single order
       }
 
-      console.log("3) normalized ordersArray:", ordersArray);
-
-      if (ordersArray.length > 0) {
-        setOrders(ordersArray);
-        toast.success("Your order(s) fetched successfully.");
-      } else {
-        setOrders([]);
-        toast.info("No orders found.");
-      }
+      setOrders(ordersArray);
+      toast.success("Your order(s) fetched successfully");
     } catch (error) {
       console.error("Error fetching orders:", error);
-      toast.error("Failed to fetch orders.");
+      toast.error("Failed to fetch orders");
     }
   };
 
-  // refetch on mount or after payment
   useEffect(() => {
     if (customerEmail) {
       fetchAllOrders();
@@ -78,58 +57,49 @@ function MyOrder() {
 
   return (
     <Layout>
+      <div className="mainBox"></div>
       <div className="order add">
         <h3>My Orders</h3>
+        {customerEmail ? (
+          orders.length > 0 ? (
+            <div className="order-list">
+              {orders.map((order, index) => (
+                <div className="order-item" key={index}>
+                  <h4>Order ID: {order.orderid}</h4>
+                  <p>Order Date: {new Date(order.orderdate).toLocaleDateString()}</p>
+                  <p>Total Amount: Rs. {order.totalamount}</p>
+                  <p>Order Status: {order.orderstatus}</p>
+                  <p>
+                    {order.orderstatus === "Delivered"
+                      ? "Your order is delivered."
+                      : order.orderstatus === "Canceled"
+                      ? "Your order has been canceled."
+                      : "Order is still being processed."}
+                  </p>
 
-        {!customerEmail ? (
-          <div className="empty">
-            <h1>You don't have any orders yet.</h1>
-          </div>
-        ) : orders.length === 0 ? (
-          <p>No orders available.</p>
-        ) : (
-          <div className="order-list">
-            {orders.map((order, i) => (
-              <div className="order-item" key={i}>
-                <h4>Order ID: {order.orderid}</h4>
-                <p>
-                  Order Date:{" "}
-                  {new Date(order.orderdate).toLocaleDateString()}
-                </p>
-                <p>Total Amount: Rs. {order.totalamount}</p>
-                <p>Order Status: {order.orderstatus}</p>
-                <p>
-                  {order.orderstatus === "Delivered"
-                    ? "Your order is delivered."
-                    : order.orderstatus === "Canceled"
-                    ? "Your order has been canceled."
-                    : "Order is still being processed."}
-                </p>
-
-                <h5>Items:</h5>
-                {order.order_items?.length > 0 ? (
+                  <h5>Items:</h5>
                   <ul>
-                    {order.order_items.map((item, idx) => (
+                    {order.order_items?.map((item, idx) => (
                       <li key={idx}>
-                        {item.productname} (Qty: {item.quantity}, Price: Rs.{" "}
-                        {item.price})
+                        {item.productname} (Qty: {item.quantity}, Price: Rs. {item.price})
                       </li>
                     ))}
                   </ul>
-                ) : (
-                  <p>No items in this order.</p>
-                )}
+                </div>
+              ))}
+              <div className="instruction-container">
+                <p className="instruction-title">Instructions:</p>
+                <p className="instruction-text">Please take a screenshot of your order</p>
+                <p className="instruction-text">Please don't reload or switch your tab</p>
               </div>
-            ))}
-
-            <div className="instruction-container">
-              <p className="instruction-title">Instructions:</p>
-              <p className="instruction-text">
-                Please take a screenshot of your order
-              </p>
-              <p className="instruction-text">
-                Please don't reload or switch your tab
-              </p>
+            </div>
+          ) : (
+            <p>No orders available</p>
+          )
+        ) : (
+          <div className="empty">
+            <div className="h">
+              <h1>You don't have any orders yet.</h1>
             </div>
           </div>
         )}
