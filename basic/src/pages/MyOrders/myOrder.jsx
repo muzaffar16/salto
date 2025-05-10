@@ -11,7 +11,6 @@ function MyOrder() {
   const [orders, setOrders] = useState([]);
   const location = useLocation();
   const { formData } = location.state || {};
-
   const customerEmail = formData?.email || localStorage.getItem("userEmail") || "";
 
   useEffect(() => {
@@ -20,7 +19,7 @@ function MyOrder() {
     }
   }, [formData]);
 
-  const fetchAllOrder = async () => {
+  const fetchAllOrders = async () => {
     if (!customerEmail) {
       toast.error("Customer email is missing.");
       return;
@@ -31,30 +30,33 @@ function MyOrder() {
         useremail: customerEmail,
       });
 
-      console.log("API Response:", response.data);
+      const ordersArray = Array.isArray(response.data?.data)
+        ? response.data.data
+        : response.data?.data
+        ? [response.data.data]
+        : [];
 
-      if (response.data?.success && Array.isArray(response.data.data) && response.data.data.length > 0) {
-        setOrders(response.data.data);
-        toast.success("Your Order(s) fetched successfully");
+      if (ordersArray.length > 0) {
+        setOrders(ordersArray);
+        toast.success("Your order(s) fetched successfully.");
       } else {
+        toast.info("No orders found.");
         setOrders([]);
-        toast.error("No orders found");
       }
     } catch (error) {
       console.error("Error fetching orders:", error);
-      toast.error("Failed to fetch orders");
+      toast.error("Failed to fetch orders.");
     }
   };
 
   useEffect(() => {
     if (customerEmail) {
-      fetchAllOrder();
+      fetchAllOrders();
     }
   }, [customerEmail, paymentDone]);
 
   return (
     <Layout>
-      <div className="mainBox"></div>
       <div className="order add">
         <h3>My Orders</h3>
         {customerEmail ? (
@@ -91,7 +93,7 @@ function MyOrder() {
               </div>
             </div>
           ) : (
-            <p>No orders available</p>
+            <p>No orders available.</p>
           )
         ) : (
           <div className="empty">
