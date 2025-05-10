@@ -28,16 +28,20 @@ function MyOrder() {
       toast.error("Customer email is missing.");
       return;
     }
-  
+
     try {
       const response = await axios.post(`${import.meta.env.VITE_backend_url}/api/orders/myOrder`, {
         useremail: customerEmail,
       });
-  
-      console.log("API Response:", response.data); // Debug: should show 3 orders
-  
-      if (response.data?.success && Array.isArray(response.data.data)) {
-        setOrders(response.data.data);
+      
+      console.log(response.data?.data); // Check what data is being returned from the API
+      
+
+      if (response.data?.success && response.data?.data) {
+        const orderData = response.data.data;
+        const ordersArray = Array.isArray(orderData) ? orderData : [orderData];
+
+        setOrders(ordersArray);
         toast.success("Your Order(s) fetched successfully");
       } else {
         toast.error("No orders found");
@@ -47,7 +51,7 @@ function MyOrder() {
       toast.error("Failed to fetch orders");
     }
   };
-  
+
   // Effect to fetch orders whenever the component mounts or when payment is done
   useEffect(() => {
     // Check if we have a valid email and fetch orders only if payment is done or on initial load
