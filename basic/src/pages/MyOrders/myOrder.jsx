@@ -40,8 +40,8 @@ function MyOrder() {
       if (response.data?.success && response.data?.data) {
         const orderData = response.data.data;
         // const ordersArray = Array.isArray(orderData) ? orderData : [orderData];
-        console.log(ordersArray)
-        setOrders(ordersArray);
+        console.log(orderData)
+        setOrders(orderData);
         toast.success("Your Order(s) fetched successfully");
       } else {
         toast.error("No orders found");
