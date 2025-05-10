@@ -33,6 +33,9 @@ function MyOrder() {
       const response = await axios.post(`${import.meta.env.VITE_backend_url}/api/orders/myOrder`, {
         useremail: customerEmail,
       });
+      
+      console.log(response.data?.data); // Check what data is being returned from the API
+      
 
       if (response.data?.success && response.data?.data) {
         const orderData = response.data.data;
