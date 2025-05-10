@@ -172,18 +172,15 @@ export const updateStatus = async (req, res) => {
   };
 
 
- // get my orders
-export const getMyOrder = async (req, res) => {
+  export const getMyOrder = async (req, res) => {
     try {
       const { useremail } = req.body;
   
-      // Check if the email is provided
       if (!useremail) {
         return res.status(400).json({ success: false, message: 'Email is required' });
       }
   
-      // Execute the query to fetch orders along with order items
-      const [orderRows] = await sequelize.query(
+      const orderRows = await sequelize.query(
         `
           SELECT 
             o.orderid, 
@@ -219,12 +216,10 @@ export const getMyOrder = async (req, res) => {
         }
       );
   
-      // If no orders found
       if (!orderRows || orderRows.length === 0) {
         return res.status(404).json({ success: false, message: 'No orders found for this user.' });
       }
   
-      // Return found orders
       res.status(200).json({ success: true, data: orderRows });
     } catch (error) {
       console.error("Error fetching orders:", error);
