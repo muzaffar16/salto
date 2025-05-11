@@ -12,7 +12,7 @@ function Cards({ image,  title, price }) {
       <Card className="overflow-hidden">
         <div className="overflow-hidden">
         {/* console.log(`{url}/api/food/${image}`);  // This will print the value of image */}
-        <Card.Img variant="top" src={`${import.meta.env.VITE_backend_url}/images/${image}`} />
+        <Card.Img variant="top" src={`${image}`} />
 
           
         </div>
