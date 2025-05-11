@@ -1,35 +1,47 @@
 import express from "express";
-// foodRoute.js
-import { addFood, listFood,removeFood,listCategories,getPopularProducts, getRecommendFood} from "../controller/foodController.js"; 
+import {
+  addFood,
+  listFood,
+  removeFood,
+  listCategories,
+  getPopularProducts,
+  getRecommendFood,
+} from "../controller/foodController.js";
 
-import multer from "multer";   // Used to handle image uploads
+import multer from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../config/cloudinary.js"; // Cloudinary config
 
 const foodRouter = express.Router();
 
-// Set up image storage configuration
-const storage = multer.diskStorage({ 
-  destination: "uploads",  // Folder to store the uploaded files
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}_${file.originalname}`);  // Naming convention for the file
-  }
+// Cloudinary storage configuration
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "restaurant_items",
+    allowed_formats: ["jpg", "jpeg", "png"],
+  },
 });
 
-const upload = multer({ storage: storage });  // Initialize multer with the storage configuration
+// Initialize multer with cloudinary storage
+const upload = multer({ storage });
 
-// Route for adding food with image upload
-foodRouter.post("/add", upload.single("image"), addFood);  // `image` is the field name in the form
+// Route for adding food with Cloudinary image upload
+foodRouter.post("/add", upload.single("image"), addFood);
 
-//get food using category
+// Get food by category
 foodRouter.get("/list", listFood);
 
-//delete food
+// Delete food
 foodRouter.post("/remove", removeFood);
 
-//get all categories
-foodRouter.get("/categories",listCategories);
+// Get all categories
+foodRouter.get("/categories", listCategories);
 
-foodRouter.get("/popularFood",getPopularProducts);
+// Popular food
+foodRouter.get("/popularFood", getPopularProducts);
 
-foodRouter.post("/recommandFood",getRecommendFood)
+// Recommendation
+foodRouter.post("/recommandFood", getRecommendFood);
 
 export default foodRouter;

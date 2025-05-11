@@ -6,54 +6,55 @@ import fs from 'fs'
 
 
 
-// add food item
+// Add Food Controller
 export const addFood = async (req, res) => {
-    // console.log(req.file); // Debugging
-    let producturl = req.file?.filename; // File name from multer
-
-    if (!req.file) {
-        return res.status(400).json({ message: "Image file is required" });
+  try {
+    // Check if image is uploaded
+    if (!req.file || !req.file.path) {
+      return res.status(400).json({ message: "Image upload failed or missing" });
     }
+
+    const producturl = req.file.path; // Cloudinary URL
 
     const { productname, price, categoryname } = req.body;
 
     if (!productname || !price || !categoryname) {
-        return res.status(400).json({ message: "Missing required fields" });
+      return res.status(400).json({ message: "Missing required fields" });
     }
 
-    try {
-        // Fetch category ID from category name
-        const [categoryResult] = await sequelize.query(
-            `SELECT categoryid FROM categories WHERE categoryname = :categoryname`,
-            { replacements: { categoryname } }
-        );
+    // Get category ID by category name
+    const [categoryResult] = await sequelize.query(
+      `SELECT categoryid FROM categories WHERE categoryname = :categoryname`,
+      {
+        replacements: { categoryname },
+      }
+    );
 
-        if (!categoryResult.length) {
-            return res.status(404).json({ message: "Category not found" });
-        }
-
-        const categoryid = categoryResult[0].categoryid;
-        const stockquantity = 0;
-
-        // Insert new product
-        await sequelize.query(
-            `INSERT INTO products (productname, categoryid, price,  producturl)
-             VALUES (:productname, :categoryid, :price, :producturl)`,
-            {
-                replacements: {
-                    productname,
-                    categoryid,
-                    price,
-                    producturl,
-                },
-            }
-        );
-
-        res.status(200).json({ message: "Product added successfully!" });
-    } catch (error) {
-        console.error("Database error:", error.message);
-        res.status(500).json({ message: "Database error", error });
+    if (!categoryResult.length) {
+      return res.status(404).json({ message: "Category not found" });
     }
+
+    const categoryid = categoryResult[0].categoryid;
+
+    // Insert new product
+    await sequelize.query(
+      `INSERT INTO products (productname, categoryid, price, producturl)
+       VALUES (:productname, :categoryid, :price, :producturl)`,
+      {
+        replacements: {
+          productname,
+          categoryid,
+          price,
+          producturl,
+        },
+      }
+    );
+
+    res.status(200).json({ message: "Product added successfully!" });
+  } catch (error) {
+    console.error("Error adding food:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 };
 
 
