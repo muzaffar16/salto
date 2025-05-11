@@ -48,7 +48,7 @@ function List({url}) {
               return(
                 <div key={item.productid} className="list-item">
           <img
-            src={`${url}/images/${item.producturl}`}
+            src={`${item.producturl}`}
             alt={item.productname}
             className="list-image"
           />

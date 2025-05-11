@@ -27,7 +27,7 @@ function Cards({ image,  title, price }) {
             </div>
             <div className="add_to_card">
               <Link onClick={() => {
-                const orderItem = { title, price, imageUrl: `${import.meta.env.VITE_backend_url}/images/${image}` };
+                const orderItem = { title, price, imageUrl: `${image}` };
                 // Create an order object
                 addToOrder(orderItem); // Use addToOrder to update the order array
                 toast.success(`${title} added into your cart`);
