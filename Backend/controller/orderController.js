@@ -31,23 +31,22 @@ export const placeOrder = async (req, res) => {
 
         // Step 2: Insert each item into the order_items table
         const orderItemsPromises = items.map(async (item) => {
-           
-                // Query to get productid by productname directly
-                const result = await sequelize.query(
-                    `SELECT productid FROM products WHERE productname = :productName`,
-                    {
-                        replacements: { productName: item.title },
-                        type: sequelize.QueryTypes.SELECT
-                    }
-                );
-
-                if (result.length === 0) {
-                    throw new Error(`Product not found for ${item.productname}`);
+            // Query to get productid by productname directly
+            const result = await sequelize.query(
+                `SELECT productid FROM products WHERE productname = :productName`,
+                {
+                    replacements: { productName: item.title },
+                    type: sequelize.QueryTypes.SELECT
                 }
+            );
 
-                item.productid = result[0].productid; // Set the resolved productId
-            
+            if (result.length === 0) {
+                throw new Error(`Product not found for ${item.productname}`);
+            }
 
+            item.productid = result[0].productid; // Set the resolved productId
+
+            // Insert into order_items table
             await sequelize.query(
                 `INSERT INTO order_items (orderid, quantity, price, productid)
                  VALUES (:orderId, :quantity, :price, :productId)`,
@@ -56,14 +55,62 @@ export const placeOrder = async (req, res) => {
                         orderId,
                         quantity: item.quantity,
                         price: item.price,
-                        productId: item.productid, // Now using productId
+                        productId: item.productid,
                     },
                     transaction,
                 }
             );
+
+            // Step 3: Update product_monthly_order table
+            const currentMonthYear = new Date().toISOString().slice(0, 7); // Format as YYYY-MM (e.g., "2025-05")
+
+            // Check if there's already an entry for the product and current month
+            const productMonthlyOrder = await sequelize.query(
+                `SELECT * FROM product_monthly_orders 
+                 WHERE productid = :productId AND month_year = :monthYear`,
+                {
+                    replacements: {
+                        productId: item.productid,
+                        monthYear: currentMonthYear,
+                    },
+                    type: sequelize.QueryTypes.SELECT,
+                    transaction,
+                }
+            );
+
+            if (productMonthlyOrder.length > 0) {
+                // If entry exists, increment order count
+                await sequelize.query(
+                    `UPDATE product_monthly_orders 
+                     SET order_count = order_count + :quantity 
+                     WHERE productid = :productId AND month_year = :monthYear`,
+                    {
+                        replacements: {
+                            productId: item.productid,
+                            monthYear: currentMonthYear,
+                            quantity: item.quantity,
+                        },
+                        transaction,
+                    }
+                );
+            } else {
+                // If entry doesn't exist, create a new record with order count as the quantity
+                await sequelize.query(
+                    `INSERT INTO product_monthly_orders (productid, order_count, month_year)
+                     VALUES (:productId, :quantity, :monthYear)`,
+                    {
+                        replacements: {
+                            productId: item.productid,
+                            quantity: item.quantity,
+                            monthYear: currentMonthYear,
+                        },
+                        transaction,
+                    }
+                );
+            }
         });
 
-        // Execute all promises
+        // Execute all promises for inserting order items and updating product_monthly_orders
         await Promise.all(orderItemsPromises);
 
         // Commit the transaction
