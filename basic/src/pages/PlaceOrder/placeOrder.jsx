@@ -64,7 +64,7 @@ const handleChange = (e) => {
   if (
     formData.alternateMobileNumber &&
     !mobileRegex.test(formData.alternateMobileNumber)
-  ) {
+  ){
     toast.error("Alternate number must be 11 digits and start with '03'.");
     return;
   }
