@@ -46,32 +46,46 @@ const PaymentForm = ({ orderType }) => {
   };
 
   const validateInputs = () => {
+    // Card holder validation
     if (!/^[a-zA-Z\s]{3,}$/.test(cardHolder)) {
       toast.error("Card holder name must contain only letters.");
       return false;
     }
 
+    // Card number validation
     if (!/^\d{16}$/.test(rawCardNumber)) {
       toast.error("Card number must be 16 digits.");
       return false;
     }
 
+    // Expiry validation
     if (!/^\d{4}$/.test(rawExpiry)) {
       toast.error("Expiry must be in MMYY format.");
       return false;
     }
 
     const mm = parseInt(rawExpiry.slice(0, 2), 10);
-    const yy = parseInt(rawExpiry.slice(2), 10) + 2000;
+    let yy = parseInt(rawExpiry.slice(2), 10);
+
+    if (isNaN(mm) || isNaN(yy) || mm < 1 || mm > 12) {
+      toast.error("Enter a valid expiry month.");
+      return false;
+    }
+
     const now = new Date();
     const currentYear = now.getFullYear();
     const currentMonth = now.getMonth() + 1;
+    const currentShortYear = currentYear % 100;
 
-    if (mm < 1 || mm > 12 || yy < currentYear || (yy === currentYear && mm < currentMonth)) {
+    // Adjust the 2-digit year input
+    yy = yy >= currentShortYear ? 2000 + yy : 2100 + yy;
+
+    if (yy < currentYear || (yy === currentYear && mm < currentMonth)) {
       toast.error("Enter a valid future expiry date.");
       return false;
     }
 
+    // CVV validation
     if (!/^\d{3}$/.test(cvv)) {
       toast.error("CVV must be 3 digits.");
       return false;
