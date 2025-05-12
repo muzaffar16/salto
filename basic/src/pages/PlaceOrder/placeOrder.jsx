@@ -177,20 +177,25 @@ function PlaceOrder() {
           </div>
 
           <input
-            type="tel"
-            name="mobileNumber"
-            value={formData.mobileNumber}
-            onChange={handleChange}
-            placeholder="Mobile Number"
-            required
-          />
-          <input
-            type="tel"
-            name="alternateMobileNumber"
-            value={formData.alternateMobileNumber}
-            onChange={handleChange}
-            placeholder="Alternate Mobile Number"
-          />
+  type="tel"
+  name="mobileNumber"
+  value={formData.mobileNumber}
+  onChange={handleChange}
+  placeholder="Mobile Number"
+  required
+  minLength={11}
+  maxLength={11}
+/>
+
+<input
+  type="tel"
+  name="alternateMobileNumber"
+  value={formData.alternateMobileNumber}
+  onChange={handleChange}
+  placeholder="Alternate Mobile Number"
+  minLength={11}
+  maxLength={11}
+/>
 
           <input
             type="text"
