@@ -6,6 +6,7 @@ import Layout from "../../components/layouts/layout";
 import { useAreaContext } from "../../Context/AreaContext";
 import { EmailContext } from "../../Context/EmailContext";
 import axios from "axios";
+import { toast } from 'react-toastify';
 
 function PlaceOrder() {
   // const url = "http://localhost:3000";
