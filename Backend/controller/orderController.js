@@ -2,7 +2,7 @@ import { sequelize } from "../Postgres/postgres.js";
 
 // Placing user order for frontend
 export const placeOrder = async (req, res) => {
-    const { userid, items, order_type, payment_type } = req.body; // Include order_type and payment_type
+    const { userid, items, order_type, payment_type } = req.body; 
     let transaction;
 
     try {
@@ -11,13 +11,13 @@ export const placeOrder = async (req, res) => {
 
         // Step 1: Insert the order into the orders table
         const order = await sequelize.query(
-            `INSERT INTO orders ( totalamount, orderstatus, orderdate, order_type, payment_type,userid)
-             VALUES (:totalAmount, :orderStatus, CURRENT_TIMESTAMP, :order_type, :payment_type,:userid)
+            `INSERT INTO orders (totalamount, orderstatus, orderdate, order_type, payment_type, userid)
+             VALUES (:totalAmount, :orderStatus, CURRENT_TIMESTAMP, :order_type, :payment_type, :userid)
              RETURNING *`,
             {
                 replacements: {
                     totalAmount: calculateTotalPrice(items),
-                    orderStatus: 'Food Processing', // Default status for new orders
+                    orderStatus: 'Food Processing',
                     order_type,
                     payment_type,
                     userid
@@ -26,28 +26,27 @@ export const placeOrder = async (req, res) => {
             }
         );
 
-        const orderId = order[0][0]?.orderid; // Retrieve the orderId from the inserted order
+        const orderId = order[0][0]?.orderid;
         if (!orderId) throw new Error("Failed to retrieve orderId from the inserted order");
 
-        // Step 2: Insert each item into the order_items table
+        // Step 2: Insert each item into the order_items table and update product_monthly_order table
         const orderItemsPromises = items.map(async (item) => {
-           
-                // Query to get productid by productname directly
-                const result = await sequelize.query(
-                    `SELECT productid FROM products WHERE productname = :productName`,
-                    {
-                        replacements: { productName: item.title },
-                        type: sequelize.QueryTypes.SELECT
-                    }
-                );
-
-                if (result.length === 0) {
-                    throw new Error(`Product not found for ${item.productname}`);
+            // Query to get productid by productname directly
+            const result = await sequelize.query(
+                `SELECT productid FROM products WHERE productname = :productName`,
+                {
+                    replacements: { productName: item.title },
+                    type: sequelize.QueryTypes.SELECT
                 }
+            );
 
-                item.productid = result[0].productid; // Set the resolved productId
-            
+            if (result.length === 0) {
+                throw new Error(`Product not found for ${item.productname}`);
+            }
 
+            item.productid = result[0].productid; // Set the resolved productId
+
+            // Insert into order_items
             await sequelize.query(
                 `INSERT INTO order_items (orderid, quantity, price, productid)
                  VALUES (:orderId, :quantity, :price, :productId)`,
@@ -56,11 +55,86 @@ export const placeOrder = async (req, res) => {
                         orderId,
                         quantity: item.quantity,
                         price: item.price,
-                        productId: item.productid, // Now using productId
+                        productId: item.productid,
                     },
                     transaction,
                 }
             );
+
+            // Step 3: Update the product_monthly_order table
+            const currentMonthYear = new Date().toISOString().slice(0, 7); // Format as YYYY-MM
+            const [existingProductOrder] = await sequelize.query(
+                `SELECT * FROM product_monthly_order WHERE productid = :productId AND month_year = :monthYear`,
+                {
+                    replacements: {
+                        productId: item.productid,
+                        monthYear: currentMonthYear,
+                    },
+                    type: sequelize.QueryTypes.SELECT,
+                }
+            );
+
+            if (existingProductOrder) {
+                // If entry exists, check if the month has changed
+                if (existingProductOrder.month_year !== currentMonthYear) {
+                    // If month has changed, reset the order count to 0 and create a new entry
+                    await sequelize.query(
+                        `UPDATE product_monthly_order
+                         SET order_count = 0
+                         WHERE productid = :productId AND month_year = :monthYear`,
+                        {
+                            replacements: {
+                                productId: item.productid,
+                                monthYear: existingProductOrder.month_year, // Previous month
+                            },
+                            transaction,
+                        }
+                    );
+
+                    // Now insert the new order count for the current month
+                    await sequelize.query(
+                        `INSERT INTO product_monthly_order (productid, order_count, month_year)
+                         VALUES (:productId, :quantity, :monthYear)`,
+                        {
+                            replacements: {
+                                productId: item.productid,
+                                quantity: item.quantity,
+                                monthYear: currentMonthYear,
+                            },
+                            transaction,
+                        }
+                    );
+                } else {
+                    // If month is the same, just update the order count
+                    await sequelize.query(
+                        `UPDATE product_monthly_order
+                         SET order_count = order_count + :quantity
+                         WHERE productid = :productId AND month_year = :monthYear`,
+                        {
+                            replacements: {
+                                quantity: item.quantity,
+                                productId: item.productid,
+                                monthYear: currentMonthYear,
+                            },
+                            transaction,
+                        }
+                    );
+                }
+            } else {
+                // If no entry exists for the product and current month, create a new entry
+                await sequelize.query(
+                    `INSERT INTO product_monthly_order (productid, order_count, month_year)
+                     VALUES (:productId, :quantity, :monthYear)`,
+                    {
+                        replacements: {
+                            productId: item.productid,
+                            quantity: item.quantity,
+                            monthYear: currentMonthYear,
+                        },
+                        transaction,
+                    }
+                );
+            }
         });
 
         // Execute all promises
@@ -83,6 +157,7 @@ export const placeOrder = async (req, res) => {
 function calculateTotalPrice(items) {
     return items.reduce((total, item) => total + item.quantity * item.price, 0);
 }
+
 
 
 
