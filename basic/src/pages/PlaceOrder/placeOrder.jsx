@@ -51,13 +51,13 @@ const handleChange = (e) => {
 };
 
 
-  const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
   e.preventDefault();
 
-  const mobileRegex = /^03\d{9}$/; // Must start with '03' and be 11 digits total
+  const mobileRegex = /^03\d{9}$/;
 
   if (!mobileRegex.test(formData.mobileNumber)) {
-   toast.error("Mobile number must be 11 digits and start with '03'.");
+    toast.error("Mobile number must be 11 digits and start with '03'.");
     return;
   }
 
@@ -65,12 +65,13 @@ const handleChange = (e) => {
     formData.alternateMobileNumber &&
     !mobileRegex.test(formData.alternateMobileNumber)
   ) {
-    alert("Alternate number must be 11 digits and start with '03'.");
+    toast.error("Alternate number must be 11 digits and start with '03'.");
     return;
   }
 
   if (!formData.address.trim()) {
     setAddressError(true);
+    toast.error("Please complete your address.");
     return;
   } else {
     setAddressError(false);
@@ -85,6 +86,7 @@ const handleChange = (e) => {
     }
   });
 };
+
 
   // ✅ Fetch user's name using email from context and auto-fill first/last name
   useEffect(() => {
