@@ -56,7 +56,7 @@ const handleChange = (e) => {
   const mobileRegex = /^03\d{9}$/; // Must start with '03' and be 11 digits total
 
   if (!mobileRegex.test(formData.mobileNumber)) {
-    alert("Mobile number must be 11 digits and start with '03'.");
+   toast.error("Mobile number must be 11 digits and start with '03'.");
     return;
   }
 
