@@ -51,24 +51,39 @@ const handleChange = (e) => {
 
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!formData.address.trim()) {
-      setAddressError(true);
-      return;
-    } else {
-      setAddressError(false);
+  const mobileRegex = /^03\d{9}$/; // Must start with '03' and be 11 digits total
+
+  if (!mobileRegex.test(formData.mobileNumber)) {
+    alert("Mobile number must be 11 digits and start with '03'.");
+    return;
+  }
+
+  if (
+    formData.alternateMobileNumber &&
+    !mobileRegex.test(formData.alternateMobileNumber)
+  ) {
+    alert("Alternate number must be 11 digits and start with '03'.");
+    return;
+  }
+
+  if (!formData.address.trim()) {
+    setAddressError(true);
+    return;
+  } else {
+    setAddressError(false);
+  }
+
+  navigate("/paymentForm", {
+    state: {
+      formData,
+      order,
+      totalCartPrice,
+      userId: formData.userId
     }
-
-    navigate("/paymentForm", {
-      state: {
-        formData,
-        order,
-        totalCartPrice,
-        userId: formData.userId // ✅ explicitly include it if needed in payment page
-      }
-    });
-  };
+  });
+};
 
   // ✅ Fetch user's name using email from context and auto-fill first/last name
   useEffect(() => {
