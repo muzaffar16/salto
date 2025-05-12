@@ -2,14 +2,15 @@ import React, { useState, useContext } from "react";
 import "@/styles/LoginPopUp.css";
 import crossIcon from "@/assets/crossIcon.png";
 import axios from "axios";
-import { TokenContext } from "../../Context/TokenContext";  // ✅ Import the TokenContext
-import { EmailContext } from "../../Context/EmailContext"; // ✅ Add this line
+import { TokenContext } from "../../Context/TokenContext";
+import { EmailContext } from "../../Context/EmailContext"; 
+import { toast } from 'react-toastify';
 
 const url = `${import.meta.env.VITE_backend_url}`;
 
 const LoginPopup = ({ setShowLogin }) => {
-  const { setToken } = useContext(TokenContext);  // ✅ Access setToken from context
-  const { setEmail } = useContext(EmailContext); // ✅ Use context
+  const { setToken } = useContext(TokenContext);  
+  const { setEmail } = useContext(EmailContext); 
 
   const [currState, setCurrState] = useState("Sign Up");
   const [data, setData] = useState({
@@ -32,6 +33,16 @@ const LoginPopup = ({ setShowLogin }) => {
 
   const onLogin = async (event) => {
     event.preventDefault();
+
+    // Validate name if signing up
+    if (currState === "Sign Up") {
+      const nameRegex = /^[A-Za-z\s]+$/;
+      if (!nameRegex.test(data.name.trim())) {
+        toast.error("Name must contain only alphabetic characters (A-Z or a-z).");
+        return;
+      }
+    }
+
     let newUrl = url;
     if (currState === "Login") {
       newUrl += "/api/user/login";
@@ -44,17 +55,17 @@ const LoginPopup = ({ setShowLogin }) => {
 
       if (response.data.success) {
         const token = response.data.token;
-        setToken(token);  // ✅ Update token in context
-        setEmail(data.email);  // Store email in context
-        localStorage.setItem("token", token);  // Store token in localStorage
-        localStorage.setItem("userEmail", data.email);  // Store email in localStorage
-        setShowLogin(false);  // Close login popup
+        setToken(token);
+        setEmail(data.email);
+        localStorage.setItem("token", token);
+        localStorage.setItem("userEmail", data.email);
+        setShowLogin(false);
       } else {
-        alert(response.data.message);  // Show error message
+        toast.error(response.data.message);  // Show error in toast
       }
     } catch (error) {
       console.error("Error during login/signup:", error);
-      alert("An error occurred. Please try again.");
+      toast.error("An error occurred. Please try again.");
     }
   };
 
