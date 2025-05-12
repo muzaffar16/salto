@@ -1,32 +1,32 @@
-import React, { useState, useContext } from "react"; 
+import React, { useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "@/styles/paymentForm.css";
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Layout from "./layout";
-import { PaymentContext } from "../../Context/PaymentContext"; 
-
-// const url = "http://localhost:3000";
+import { PaymentContext } from "../../Context/PaymentContext";
 
 const PaymentForm = ({ orderType }) => {
   const { setPaymentDone } = useContext(PaymentContext);
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Extract formData, order, totalCartPrice, and order_type from the location state
   const { formData, order, totalCartPrice, order_type } = location.state || {};
 
   const [cardHolder, setCardHolder] = useState("YOUR NAME");
   const [cardNumber, setCardNumber] = useState("•••• •••• •••• ••••");
   const [expiry, setExpiry] = useState("MM/YY");
+  const [cvv, setCvv] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [loading, setLoading] = useState(false);
 
   const handleCardNumberChange = (e) => {
     let value = e.target.value.replace(/\D/g, "").slice(0, 16);
     const parts = value.match(/.{1,4}/g) || [];
-    setCardNumber(parts.join(" ") || "•••• •••• •••• ••••");
-    e.target.value = parts.join(" ");
+    const formatted = parts.join(" ");
+    setCardNumber(formatted || "•••• •••• •••• ••••");
+    e.target.value = formatted;
   };
 
   const handleExpiryChange = (e) => {
@@ -40,49 +40,63 @@ const PaymentForm = ({ orderType }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
+    const plainCardNumber = cardNumber.replace(/\s/g, "");
+    const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+
+    if (paymentMethod === "card") {
+      if (!/^\d{16}$/.test(plainCardNumber)) {
+        toast.error("Card number must be 16 digits.");
+        return;
+      }
+      if (!expiryRegex.test(expiry)) {
+        toast.error("Enter a valid expiry date in MM/YY format.");
+        return;
+      }
+      if (!/^\d{3}$/.test(cvv)) {
+        toast.error("CVV must be exactly 3 digits.");
+        return;
+      }
+    }
+
     const payment_type = paymentMethod;
-    const order_type = orderType;
-  
-    // Prepare customer data to be sent to the backend
-    const customerData = { ...formData };
-  
+
     try {
-      const response = await axios.post(`${import.meta.env.VITE_backend_url}/api/customer/add`, customerData);
-  
+      const response = await axios.post(
+        `${import.meta.env.VITE_backend_url}/api/customer/add`,
+        { ...formData }
+      );
+
       if (response.status === 200) {
         toast.success("Customer Added Successfully...");
         const userId = response.data.userid;
-        console.log("user id: ", userId);
-  
-        // ✅ FIXED: Use `userid` instead of `userId`
+
         const orderData = {
           userid: userId,
           items: order,
           order_type,
-          payment_type
+          payment_type,
         };
-  
-        const orderResponse = await axios.post(`${import.meta.env.VITE_backend_url}/api/orders/place`, orderData);
+
+        const orderResponse = await axios.post(
+          `${import.meta.env.VITE_backend_url}/api/orders/place`,
+          orderData
+        );
+
         if (orderResponse.status === 200) {
           setPaymentDone(true);
           toast.success("Payment successful! Redirecting...");
-  
-          navigate("/myOrder", {
-            state: {
-              formData: { ...formData },
-            },
-          });
+          navigate("/myOrder", { state: { formData: { ...formData } } });
         }
       }
     } catch (error) {
       toast.error("There was an error processing your request.");
     }
   };
-  
 
   return (
     <Layout>
+      <ToastContainer position="top-center" />
       <div className="mainBox"></div>
       <div className="payment-container">
         <div className="payment-card">
@@ -90,7 +104,7 @@ const PaymentForm = ({ orderType }) => {
             <h2>Payment Details</h2>
             <p>Complete your purchase securely</p>
           </div>
-          
+
           <div className="card-preview float-animation">
             <div className="card-chip"></div>
             <div className="card-details">
@@ -109,14 +123,15 @@ const PaymentForm = ({ orderType }) => {
           </div>
 
           <form className="payment-form" onSubmit={handleSubmit}>
-            {/* Only render card details if paymentMethod is 'card' */}
             {paymentMethod === "card" && (
               <>
                 <div className="form-group">
                   <input
                     type="text"
                     placeholder="Card Holder Name"
-                    onChange={(e) => setCardHolder(e.target.value || "YOUR NAME")}
+                    onChange={(e) =>
+                      setCardHolder(e.target.value || "YOUR NAME")
+                    }
                     required
                   />
                   <label>Card Holder Name</label>
@@ -141,14 +156,20 @@ const PaymentForm = ({ orderType }) => {
                     <label>Expiry Date</label>
                   </div>
                   <div className="form-group">
-                    <input type="password" placeholder="CVV" maxLength="3" required />
+                    <input
+                      type="password"
+                      placeholder="CVV"
+                      maxLength="3"
+                      value={cvv}
+                      onChange={(e) => setCvv(e.target.value)}
+                      required
+                    />
                     <label>CVV</label>
                   </div>
                 </div>
               </>
             )}
 
-            {/* Payment Method Selection */}
             <div className="payment-method">
               <label>Payment Method</label>
               <div>
