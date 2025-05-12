@@ -35,13 +35,20 @@ function PlaceOrder() {
     0
   );
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
+const handleChange = (e) => {
+  const { name, value } = e.target;
+
+  // Allow only digits in mobile number fields
+  if ((name === "mobileNumber" || name === "alternateMobileNumber") && !/^\d*$/.test(value)) {
+    return; // Ignore non-digit input
+  }
+
+  setFormData({
+    ...formData,
+    [name]: value
+  });
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
