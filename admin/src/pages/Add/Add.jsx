@@ -3,15 +3,12 @@ import "./Add.css";
 import { assets } from "@/assets/asset";
 import axios from 'axios';
 import { toast } from 'react-toastify';
- 
 
-function Add({url}) {
-    // const url = "http://localhost:3000"; 
-
-    const [image, setImage] = useState(null); // Image state
+function Add({ url }) {
+    const [image, setImage] = useState(null);
     const [data, setData] = useState({
         productname: "",
-        price: 0,
+        price: "",
         categoryname: "Pizza",
     });
 
@@ -23,12 +20,35 @@ function Add({url}) {
         }));
     };
 
+    const validateInputs = () => {
+        const nameRegex = /^[A-Za-z][A-Za-z0-9 ]*$/;
+        if (!nameRegex.test(data.productname.trim())) {
+            toast.error("Product name must start with a letter and contain only letters and numbers.");
+            return false;
+        }
+
+        const price = parseFloat(data.price);
+        if (isNaN(price) || price <= 0) {
+            toast.error("Price must be a positive number.");
+            return false;
+        }
+
+        if (!image) {
+            toast.error("Please upload an image.");
+            return false;
+        }
+
+        return true;
+    };
+
     const onSubmitHandler = async (event) => {
         event.preventDefault();
 
+        if (!validateInputs()) return;
+
         const formData = new FormData();
-        formData.append("productname", data.productname);
-        formData.append("price", Number(data.price));
+        formData.append("productname", data.productname.trim());
+        formData.append("price", parseFloat(data.price));
         formData.append("categoryname", data.categoryname);
         formData.append("image", image);
 
@@ -37,15 +57,15 @@ function Add({url}) {
             if (response.status === 200) {
                 setData({
                     productname: "",
-                    price: 0,
+                    price: "",
                     categoryname: "Pizza",
                 });
-                setImage(null); // Reset image preview
-                toast.success(response.data.message)
+                setImage(null);
+                toast.success(response.data.message);
             }
         } catch (error) {
             console.error("Error adding product:", error);
-            toast.error(response.data.message)
+            toast.error("Failed to add product.");
         }
     };
 
@@ -75,7 +95,7 @@ function Add({url}) {
                         value={data.productname}
                         type="text"
                         name='productname'
-                        placeholder='Type here'
+                        placeholder='e.g., Chicken Tikka'
                         required
                     />
                 </div>
@@ -104,8 +124,10 @@ function Add({url}) {
                             value={data.price}
                             type="number"
                             name='price'
-                            placeholder='Rs20'
+                            placeholder='e.g., 200'
                             required
+                            min="1"
+                            step="any"
                         />
                     </div>
                 </div>
