@@ -186,8 +186,6 @@ LIMIT 10
 };
 
 
-// Get recommended food by checking user order
-
 export const getRecommendFood = async (req, res) => {
     const { items } = req.body; // Expect an array of items in the request body
 
@@ -197,7 +195,7 @@ export const getRecommendFood = async (req, res) => {
 
     try {
         // Step 1: Extract unique product names or titles from the user's order
-        const titles = [...new Set(items.map(item => item.title.toLowerCase()))];
+        const titles = [...new Set(items.map(item => item.title.trim().toLowerCase()))];
 
         // Step 2: Retrieve the category IDs for each ordered product
         const categoryIds = [];
@@ -205,15 +203,17 @@ export const getRecommendFood = async (req, res) => {
             const result = await sequelize.query(
                 `SELECT categoryid 
                  FROM products 
-                 WHERE productname = :title`, 
+                 WHERE LOWER(productname) = :title`, // Ensure case-insensitive comparison
                 {
-                    replacements: { title: title },
+                    replacements: { title },
                     type: sequelize.QueryTypes.SELECT,
                 }
             );
 
             if (result.length > 0) {
                 categoryIds.push(result[0].categoryid);
+            } else {
+                console.warn(`Product with title ${title} not found.`);
             }
         }
 
@@ -230,7 +230,7 @@ export const getRecommendFood = async (req, res) => {
                      ORDER BY po.order_count DESC, p.productname ASC
                      LIMIT 5`,
                     {
-                        replacements: { categoryId: categoryId },
+                        replacements: { categoryId },
                         type: sequelize.QueryTypes.SELECT,
                     }
                 );
@@ -244,6 +244,9 @@ export const getRecommendFood = async (req, res) => {
         if (filteredRecommendations.length === 0) {
             return res.status(404).json({ message: "No recommendations available." });
         }
+
+        // Log the recommendations for debugging
+        console.log('Recommendations:', filteredRecommendations);
 
         res.status(200).json({ recommendations: filteredRecommendations });
     } catch (error) {
