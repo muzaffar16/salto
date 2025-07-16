@@ -10,6 +10,7 @@ export const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     try {
+       
         const user = await sequelize.query(
             `SELECT userid, email, password FROM users WHERE email = :email`,
             { replacements: { email } }
